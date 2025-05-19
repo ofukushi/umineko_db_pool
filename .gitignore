@@ -1,0 +1,52 @@
+
+# Python project files
+
+
+
+# Python bytecode
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Virtual environment
+.venv/
+env/
+venv/
+
+# Environment variable files
+.env
+.env.*
+
+# Docker artifacts
+*.log
+*.pid
+*.sock
+Dockerfile.*
+docker-compose.yml
+*.db
+
+# VS Code and IDE settings
+.vscode/
+.idea/
+
+# macOS and Linux junk
+.DS_Store
+*.swp
+*~
+
+# Test and coverage
+htmlcov/
+.tox/
+.coverage
+.pytest_cache/
+
+# Git and debug
+.git/
+*.orig
+*.bak
+
+# Jupyter/IPython
+.ipynb_checkpoints/
+
+.env.umineko_db_pool
+.env.umineko_db_pool
