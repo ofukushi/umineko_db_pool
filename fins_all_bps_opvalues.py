@@ -11,10 +11,6 @@ from db_utils import get_database_engine, get_table_names
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
-# # DBエンジン
-# engine, environment = get_database_engine()
-# tables = get_table_names()
-
 # 理論価値計算のための関数
 def calculate_operation_values(company_data):
 

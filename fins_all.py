@@ -1,4 +1,21 @@
 
+# Required environment variables:
+# - AWS_ACCESS_KEY_ID: AWS_ACCESS_KEY_ID
+# - AWS_SECRET_ACCESS_KEY: AWS_SECRET_ACCESS_KEY
+# - EMAIL_ADDRESS: G_MAIL_ADDRESS
+# - PASSWORD: J_QUANTS_PASSWORD
+# - HEROKU_DATABASE_URL: HEROKU_DATABASE_URL
+# - RENDER_DATABASE_URL: RENDER_DATABASE_URL
+# - External_RENDER_DATABASE_URL: External_RENDER_DATABASE_URL
+# - LOCAL_DATABASE_URL: LOCAL_DATABASE_URL
+
+#  Options for overriding defaults:
+# - HEROKU_ENV: defaults to "false" for saving
+# - RENDER_ENV: defaults to "false" for saving
+# - USE_S3: defaults to "false" for determining whether to use S3 or local JSON files
+# - S3_BUCKET_NAME: defaults to "jquants-json"
+# - LOCAL_JSON_DIR: defaults to "/mnt/c/Users/osamu/OneDrive/jquants_json_data"
+
 # fins_all.py
 
 import os
@@ -63,11 +80,7 @@ def load_statements_from_json(root_folder):
     return all_statements
 
 def load_statements_from_s3(bucket_name):
-    s3 = boto3.client(
-        's3',
-        aws_access_key_id=os.getenv('AWS_ACCESS_KEY_ID'),
-        aws_secret_access_key=os.getenv('AWS_SECRET_ACCESS_KEY')
-    )
+    s3 = boto3.client('s3')
 
     paginator = s3.get_paginator('list_objects_v2')
     all_statements = []
@@ -191,8 +204,8 @@ def process_new_data():
         logging.error(f"Error in process_and_save_operation_values: {e}")
 
 if __name__ == "__main__":
-    load_dotenv(dotenv_path=".env.umineko_db_pool")
-    use_s3 = os.getenv("USE_S3", "false").lower() == "true"
+    load_dotenv(dotenv_path="/mnt/c/Users/osamu/OneDrive/onedrive_python_source/.env")
+    use_s3 = os.getenv("USE_S3", "true").lower() == "true"
     EMAIL_ADDRESS = os.getenv("G_MAIL_ADDRESS")
     PASSWORD = os.getenv("J_QUANTS_PASSWORD")
     api = JQuantsAPI(EMAIL_ADDRESS, PASSWORD)
@@ -215,18 +228,13 @@ if __name__ == "__main__":
         bucket = os.getenv("S3_BUCKET_NAME", "jquants-json")
         all_statements = load_statements_from_s3(bucket)
     else:
-        base_folder = os.getenv("LOCAL_JSON_DIR")
+        base_folder = os.getenv("LOCAL_JSON_DIR", "/mnt/c/Users/osamu/OneDrive/jquants_json_data")
         all_statements = load_statements_from_json(base_folder)
 
     logging.info(f"✅ Loaded {len(all_statements)} statements.")
 
     if all_statements:
         df, columns_order = transform_fins_dataframe(all_statements)
-
-        # is_heroku = os.getenv("HEROKU_ENV", "false").lower() == "true"
-        # db_url = os.getenv("HEROKU_DATABASE_URL") if is_heroku else os.getenv("LOCAL_DATABASE_URL")
-        # engine = create_engine(db_url.replace('postgres://', 'postgresql+psycopg2://'))
-        # environment = "Heroku" if is_heroku else "Local"
 
         engine, environment = get_database_engine()
         tables = get_table_names()

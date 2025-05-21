@@ -10,10 +10,6 @@ from db_utils import get_database_engine, get_table_names
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
-# # DBエンジン
-# engine, environment = get_database_engine()
-# tables=get_table_names()
-
 def calculate_and_save_growth_rates():
     # DBエンジン
     engine, environment = get_database_engine()

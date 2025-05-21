@@ -9,11 +9,8 @@ from db_utils import get_database_engine, get_table_names
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
-# # DBエンジン
-# engine, environment = get_database_engine()
-# tables = get_table_names()
-
 def load_and_process_data():
+    logging.info(f"🚀Script 'fins_all_adjusted' started...")
     # DBエンジン
     engine, environment = get_database_engine()
     tables = get_table_names()
@@ -157,13 +154,14 @@ def load_and_process_data():
     df_sorted.to_sql(tables["fins_all_adjusted"], engine, if_exists='replace', index=False)
     logging.info(f"Updated data with flags saved to '{tables['fins_all_adjusted']}'.")
 
+
 if __name__ == "__main__":
-    logging.info(f"🚀Script '{tables['fins_all_adjusted']}' started...")
     try:
+        logging.info(f"🚀Script 'fins_all_adjusted' started...")
         load_and_process_data()
     except Exception as e:
         logging.exception(f"Unhandled error: {e}")
-    logging.info(f"✅Script'{tables['fins_all_adjusted']}' completed.")
+        logging.info(f"✅Script'fins_all_adjusted' completed.")
 
 
 

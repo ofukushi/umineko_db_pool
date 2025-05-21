@@ -9,7 +9,7 @@ load_dotenv()
 
 def detect_environment():
     is_heroku = os.getenv("HEROKU_ENV", "false").lower() == "true"
-    is_render = os.getenv("RENDER_ENV", "false").lower() == "true"
+    is_render = os.getenv("RENDER_ENV", "true").lower() == "true"
     is_local = not is_heroku and not is_render
     return is_local, is_heroku, is_render
 
